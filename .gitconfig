@@ -5,7 +5,7 @@
 	default = simple
 [core]
 	excludesfile = /Users/rajin/.gitignore_global
-	editor = /usr/bin/vim
+	editor = vim
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path =
