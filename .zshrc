@@ -82,8 +82,22 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias vi="vim"
+alias sudo="sudo "
+
+# git
+alias gs="git status"
+function gcbd() {
+  local dateStr
+  dateStr=$(date +'%y%m%d') &&
+  git checkout -b david/$dateStr-$1
+}
+alias gd="git diff --color-moved"
+alias gdc="git diff --cached --color-moved"
+
+setopt cdable_vars
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
 export TERM="xterm-256color"
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
