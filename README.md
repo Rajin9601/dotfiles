@@ -30,10 +30,7 @@ initial dev setting
 
 * need to edit excludesfile of .gitconfig
 
+# fzf
 
-
-
-
-
-
-
+* install fzf & useful bindings
+  * then copy the .fzf.zsh
