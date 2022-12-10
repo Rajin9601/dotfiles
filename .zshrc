@@ -84,20 +84,58 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias vi="vim"
 alias sudo="sudo "
+alias rm="rm -i"
+alias mv="mv -i"
+
+code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
 
 # git
 alias gs="git status"
 function gcbd() {
+  if [ -z $1 ]; then
+    echo "empty argument is not supported"
+    return -1
+  fi
   local dateStr
   dateStr=$(date +'%y%m%d') &&
   git checkout -b david/$dateStr-$1
 }
 alias gd="git diff --color-moved"
 alias gdc="git diff --cached --color-moved"
+alias gp="git push -u origin"
+function gbsu() {
+  local branchName
+  branchName=$(git symbolic-ref --short HEAD)
+  git branch -u origin/$branchName
+}
+
+function gprune() {
+  git fetch -p && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done
+}
+function gcr() {
+  local branchName
+  branchName=$(git branch -r | grep -e "origin/release-*" | fzf -1)
+  branchName=$(echo -n "${branchName//[[:space:]]/}")
+  branchName="${branchName:7}"
+  git checkout $branchName
+}
+
+# github
+alias ghpr="gh pr create -w"
+function ghprq() {
+  local branchName
+  branchName=$(git branch -r | grep -e "origin/release-*" | fzf -1)
+  branchName=$(echo -n "${branchName//[[:space:]]/}")
+  branchName="${branchName:7}"
+  gh pr create -w --base $branchName
 
 setopt cdable_vars
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export TERM="xterm-256color"
 
+alias gw="./gradlew"
+alias deeplink="adb shell am start -a android.intent.action.VIEW -d"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# folder of all of your autocomplete functions
+fpath=($HOME/.zsh-completions $fpath)

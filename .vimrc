@@ -22,6 +22,7 @@ nmap ga <Plug>(EasyAlign)
 nmap <F7> :NERDTreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 nmap <c-n> :NERDTreeFocus<CR>
+nmap , @@
 
 autocmd BufWritePre * StripWhitespace
 
@@ -49,4 +50,5 @@ set clipboard=unnamed
 set background=dark
 syntax on
 
+vnoremap p pgvy
 
