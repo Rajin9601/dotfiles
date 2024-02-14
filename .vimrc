@@ -24,8 +24,6 @@ nmap <F8> :TagbarToggle<CR>
 nmap <c-n> :NERDTreeFocus<CR>
 nmap , @@
 
-autocmd BufWritePre * StripWhitespace
-
 let g:tagbar_ctags_bin="~/Lib/ctags"
 
 set backspace=indent,eol,start

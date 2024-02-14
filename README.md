@@ -10,27 +10,32 @@ initial dev setting
 
 * brew
 * iterm2
+    * use Solarized-dark
+    * Hotkey : shift+cmd+k
 * oh my zsh
 * vim
+* vim-plug
+* fzf
+* lazygit
 
-# VIM
+# settings
 
-* install vim-plug
-* install vim plugins
-    :PlugInstall
-* update vim
-    brew install vim
+symbolic links
 
-# Shell
+```
+ln -s ~/dotfiles/.gitignore_global ~/.gitignore_global
+ln -s ~/dotfiles/.gitconfig ~/.gitconfig
+ln -s ~/dotfiles/.vimrc ~/.vimrc
+```
 
-* need to edit the path in the front of .zshrc
-* Solarized-dark to iterm2
+append to .zshrc
+
+```
+source ~/dotfiles/.zshrc
+```
+
 
 # git
 
 * need to edit excludesfile of .gitconfig
 
-# fzf
-
-* install fzf & useful bindings
-  * then copy the .fzf.zsh
