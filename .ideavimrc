@@ -1,0 +1,15 @@
+Plug 'tpope/vim-surround'
+
+set NERDTree
+
+set incsearch
+set hlsearch
+set clipboard=unnamed
+set keep-english-in-normal-and-restore-in-insert
+vnoremap p pgvy
+nmap , @@
+
+" ideavim only
+set ideajoin
+set ideamarks
+

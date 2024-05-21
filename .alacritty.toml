@@ -1,0 +1,14 @@
+
+[font.normal]
+family = "MesloLGS NF"
+style = "Regular"
+
+[font]
+size = 12.5
+
+[keyboard]
+bindings = [
+  {key= "]", mods="Command", chars="\u001bi" },
+  {key= "[", mods="Command", chars="\u001bo" },
+  {key= "/", mods="Command", chars="\u001bp" },
+]

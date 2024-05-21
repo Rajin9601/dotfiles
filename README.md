@@ -12,30 +12,30 @@ initial dev setting
 * iterm2
     * use Solarized-dark
     * Hotkey : shift+cmd+k
-* oh my zsh
 * vim
 * vim-plug
 * fzf
 * lazygit
+* github cli 
 
 # settings
 
 symbolic links
 
 ```
-ln -s ~/dotfiles/.gitignore_global ~/.gitignore_global
-ln -s ~/dotfiles/.gitconfig ~/.gitconfig
-ln -s ~/dotfiles/.vimrc ~/.vimrc
+ln -s ~/dotfiles/.gitignore_global ~/
+ln -s ~/dotfiles/.gitconfig ~/
+ln -s ~/dotfiles/.vimrc ~/
+ln -s ~/dotfiles/.ideavimrc ~/
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+ln -sf ~/dotfiles/.tmux.conf ~
+
+# zsh
+git clone https://github.com/zdharma-continuum/zinit.git ~/.zinit/bin
+ln -sf ~/dotfiles/.zshrc ~
+cp ~/dotfiles/.zshrc.local ~
+exec zsh
+p10k configure
 ```
-
-append to .zshrc
-
-```
-source ~/dotfiles/.zshrc
-```
-
-
-# git
-
-* need to edit excludesfile of .gitconfig
 
