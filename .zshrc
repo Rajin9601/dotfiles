@@ -197,9 +197,13 @@ alias k="kubectl"
 alias kctx="switch"
 alias kns="switch namespace"
 alias k9="k9s --readonly"
+alias kar="kubectl argo rollouts"
 
 # terraform
 alias tf="terraform"
+
+# helm
+export HELM_DIFF_OUTPUT=dyff
 
 # zsh vi-mode backspace problem
 bindkey "^?" backward-delete-char
@@ -208,3 +212,5 @@ source <(switcher init zsh)
 source <(switcher completion zsh)
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
+. ~/.asdf/plugins/java/set-java-home.zsh
+
