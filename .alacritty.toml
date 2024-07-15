@@ -11,4 +11,5 @@ bindings = [
   {key= "]", mods="Command", chars="\u001bi" },
   {key= "[", mods="Command", chars="\u001bo" },
   {key= "/", mods="Command", chars="\u001bp" },
+  {key= "m", mods="Control", chars="\u001bc" },
 ]

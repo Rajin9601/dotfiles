@@ -16,6 +16,7 @@ zinit ice depth=1
 zinit light romkatv/powerlevel10k
 zinit light zdharma/fast-syntax-highlighting
 zinit light zsh-users/zsh-completions
+zinit light olets/zsh-abbr
 
 # zsh-autosuggestions
 zinit light zsh-users/zsh-autosuggestions
@@ -56,8 +57,8 @@ if (( $+commands[lsd] )); then
   alias ll='lsd -l'
   alias lt='lsd --tree --depth=2'
 else
-  alias l='ls -alh'
-  alias ll='ls -lh'
+  alias l='ls -alh --color=auto'
+  alias ll='ls -lh --color=auto'
 fi
 
 HISTSIZE=90000
@@ -198,7 +199,7 @@ alias kctx="switch"
 alias kns="switch namespace"
 alias k9="k9s --readonly"
 alias kar="kubectl argo rollouts"
-
+alias kard="kubectl argo rollouts dashboard"
 # terraform
 alias tf="terraform"
 
