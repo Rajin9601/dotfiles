@@ -1,0 +1,5 @@
+keybinding:
+  universal:
+    quitWithoutChangingDirectory: 'q'
+    quit: 'Q'
+    executeCustomCommand: <disabled>

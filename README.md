@@ -27,6 +27,7 @@ ln -s ~/dotfiles/.gitignore_global ~/
 ln -s ~/dotfiles/.gitconfig ~/
 ln -s ~/dotfiles/.vimrc ~/
 ln -s ~/dotfiles/.ideavimrc ~/
+ln -s ~/dotfiles/lazygit.config.yml ~/Library/Application\ Support/lazygit/config.yml
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ln -sf ~/dotfiles/.tmux.conf ~

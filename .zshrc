@@ -94,6 +94,7 @@ function gcbd() {
 alias gd="git diff --color-moved"
 alias gdc="git diff --cached --color-moved"
 alias gp="git push -u origin"
+alias mg='cd $(git rev-parse --show-toplevel)'
 
 function gbsu() {
   local branchName
