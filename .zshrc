@@ -214,6 +214,8 @@ bindkey "^?" backward-delete-char
 source <(switcher init zsh)
 source <(switcher completion zsh)
 
+switch set-last-context > /dev/null
+
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 . ~/.asdf/plugins/java/set-java-home.zsh
 
