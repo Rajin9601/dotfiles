@@ -5,6 +5,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# PATH
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
 # zinit
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -34,17 +36,10 @@ zinit cdreplay
 
 PROMPT='$(kube_ps1)'$PROMPT
 
-unalias zi
-eval "$(zoxide init zsh)"
-
-# Load local configs
-if [[ -f ~/.zshrc.local ]]; then
-  source ~/.zshrc.local
-fi
-
 # ETCs
 
 alias vi="vim"
+alias nv="nvim"
 alias rm="rm -i"
 alias mv="mv -i"
 alias ls='ls --color=auto'
@@ -106,25 +101,12 @@ function gbsu() {
 function gprune() {
   git fetch -p && for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done
 }
-function gcr() {
-  local branchName
-  branchName=$(git branch -r | grep -e "origin/release-*" | fzf -1)
-  branchName=$(echo -n "${branchName//[[:space:]]/}")
-  branchName="${branchName:7}"
-  git checkout $branchName
-}
 
 # github
 alias ghpr="gh pr create -w"
-function ghprq() {
-  local branchName
-  branchName=$(git branch -r | grep -e "origin/release-*" | fzf -1)
-  branchName=$(echo -n "${branchName//[[:space:]]/}")
-  branchName="${branchName:7}"
-  gh pr create -w --base $branchName
-}
 
 # fzf
+source <(fzf --zsh)
 
 fbr() {
   local branches branch
@@ -167,6 +149,39 @@ gfSCR() {
   cut -c4- | sed 's/.* -> //'
 }
 
+__fzf_in_dir_rajin() {
+  # from fzf --zsh. ALT-C function
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local dir="$(FZF_DEFAULT_COMMAND="${FZF_ALT_C_COMMAND:-}" FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --walker=dir,follow,hidden --walker-root="$1" --scheme=path --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" $(__fzfcmd) +m < /dev/tty)"
+  if [[ -z "$dir" ]]; then
+    return 0
+  fi
+  cd $dir
+}
+
+# from : https://gist.github.com/kunalb/abfe5757e89ffba1cf3959c9543d9ac0#file-pane-sh-L10
+function _print_all_panes() {
+  for pane_id in $(tmux list-panes -F '#{pane_id}'); do
+    tmux capture-pane -p -J -S 0 -E - -t "$pane_id" | tr ' ' '\n' | sort -u | rg '[a-zA-Z0-9]+'
+  done
+}
+
+_tmux_pane_words() {
+  local current_word="${LBUFFER##* }"
+  local new_rbuffer="${RBUFFER/#[^ ]##/}"
+  local prompt="${LBUFFER% *} ␣ $new_rbuffer "
+
+  local selected_word=$(_print_all_panes | fzf --query="$current_word" --prompt="$prompt" --height=20 --layout=reverse --no-sort --print-query | tail -n1)
+  local new_lbuffer="${LBUFFER% *} $selected_word"
+  BUFFER="$new_lbuffer$new_rbuffer"
+  CURSOR="${#${new_lbuffer}}"
+
+  zle redisplay
+}
+
+zle -N _tmux_pane_words
+bindkey '^U' _tmux_pane_words
+
 # lazygit
 
 lg()
@@ -189,12 +204,25 @@ alias gw="./gradlew"
 alias deeplink="adb shell am start -a android.intent.action.VIEW -d"
 alias sourceZ="source ~/.zshrc"
 
+jwtd() {
+  local part
+  for i in 1 2; do
+    part=$(echo -n "$1" | cut -d. -f$i | tr '_-' '/+')
+    while (( ${#part} % 4 )); do part+="="; done
+    echo "$part" | base64 -d | jq .
+  done
+}
+
 # infra
 
 ## kubectl
-source <(kubectl completion zsh)
+(( $+commands[kubectl] )) && source <(kubectl completion zsh)
 
 alias k="kubectl"
+alias kgp="kubectl get pods -o wide"
+function knr() {
+  kgp -A -o wide | rg $1 | rg Running | awk '{print "kubectl top pods -n "$1" "$2}' | bash | rg "Mi" | sort -k3 -nr | column -t
+}
 # alias kctx="kubectx"
 # alias kns="kubens"
 alias kctx="switch"
@@ -212,11 +240,35 @@ export HELM_DIFF_COLOR=true
 # zsh vi-mode backspace problem
 bindkey "^?" backward-delete-char
 
-source <(switcher init zsh)
-source <(switcher completion zsh)
+if (( $+commands[switcher] )); then
+  source <(switcher init zsh)
+  source <(switcher completion zsh)
+  switch set-last-context > /dev/null
+fi
 
-switch set-last-context > /dev/null
+# aws
+if [[ -f ~/.aws/current_profile ]]; then
+  read -r AWS_PROFILE < ~/.aws/current_profile
+  export AWS_PROFILE
+fi
 
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+awsctx() {
+  # shellcheck disable=SC2016
+  AWS_PROFILE=$(FZF_DEFAULT_COMMAND='aws configure list-profiles | perl -pe "s/^(${AWS_PROFILE})$/\x1b[33m\1\x1b[0m/g"' fzf --ansi) &&\
+    mkdir -p ~/.aws &&\
+    cat <<< "${AWS_PROFILE}" > ~/.aws/current_profile &&\
+    export AWS_PROFILE
+}
 
-eval "$(/Users/rajin/.local/bin/mise activate zsh)"
+(( $+commands[aws_completer] )) && complete -C aws_completer aws
+function ec2ip() {
+  aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" --query "Reservations[*].Instances[*].PrivateIpAddress" --output text
+}
+
+# mise
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+
+# Load local configs (company / this machine). Keep this at the end.
+if [[ -f ~/.zshrc.local ]]; then
+  source ~/.zshrc.local
+fi
