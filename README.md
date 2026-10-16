@@ -38,6 +38,7 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # zsh
 git clone https://github.com/zdharma-continuum/zinit.git ~/.zinit/bin
 ln -sf ~/dotfiles/.zshrc ~
+ln -s ~/dotfiles/.p10k.zsh ~/
 exec zsh
 p10k configure
 ```
