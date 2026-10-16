@@ -207,6 +207,7 @@ alias tf="terraform"
 
 # helm
 export HELM_DIFF_OUTPUT=dyff
+export HELM_DIFF_COLOR=true
 
 # zsh vi-mode backspace problem
 bindkey "^?" backward-delete-char
@@ -216,6 +217,6 @@ source <(switcher completion zsh)
 
 switch set-last-context > /dev/null
 
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-. ~/.asdf/plugins/java/set-java-home.zsh
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
+eval "$(/Users/rajin/.local/bin/mise activate zsh)"
