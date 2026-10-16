@@ -33,6 +33,10 @@ ln -s ~/dotfiles/.tmux.conf ~
 ln -s ~/dotfiles/lazygit.config.yml ~/Library/Application\ Support/lazygit/config.yml
 ln -s ~/dotfiles/.ghostty.conf ~/.config/ghostty/config
 
+# neovim (AstroNvim). set up mise first (mason needs node, python, ...)
+ln -s ~/dotfiles/nvim ~/.config/nvim
+nvim # then run :Lazy restore
+
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 # zsh
